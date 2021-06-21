@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/views/Login.vue"),
   },
   {
     path: "/about",
@@ -23,6 +29,19 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  store.commit("ajax/clear"); // 取消请求
+  if (to.path === "/login") {
+    next();
+  } else {
+    if (store.state.user.isLogin) {
+      next();
+    } else {
+      next("/login");
+    }
+  }
 });
 
 export default router;

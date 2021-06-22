@@ -28,6 +28,6 @@ const store = new Vuex.Store({
   mutations: {},
   actions: {},
   plugins,
-  // strict: true, //严格模式
+  strict: true, //严格模式
 });
 export default store;

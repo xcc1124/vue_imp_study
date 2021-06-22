@@ -9,7 +9,6 @@ const state = () => ({
 const getters = {};
 const mutations = {
   setUser(state, user) {
-    console.log(222);
     state.user = user;
   },
   clearUser(state) {
@@ -30,6 +29,7 @@ const actions = {
       setTimeout(() => {
         if (state.userDict[user.username] === user.password) {
           commit("setUser", user);
+          commit("isLoginTrue");
           resolve();
         } else {
           reject();

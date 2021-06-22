@@ -11,7 +11,6 @@ export default (store) => {
   }
   /**监听数据改变 */
   store.subscribe((mutation, state) => {
-    console.log(111);
     if (mutation.type.startsWith("user/")) {
       if (mutation.type === "user/setUser") {
         const user = JSON.stringify(state.user);

@@ -40,13 +40,23 @@ export default {
     //   setUser: "user/setUser",
     // }),
     ...mapActions("user", ["setUser"]),
+    ...mapActions("router", ["getRouter"]),
     login() {
-      this.setUser(this.userForm)
+      //设置了严格模式，不能给vuex中绑定地址
+      this.setUser(JSON.parse(JSON.stringify(this.userForm)))
         .then(() => {
-          console.log("登录成功");
+          this.$message.success("登录成功，等待跳转...");
+          this.getRouter()
+            .then(() => {
+              this.$message.success("获取路由成功...");
+              this.$router.push("/");
+            })
+            .catch(() => {
+              this.$message.error("获取路由失败");
+            });
         })
         .catch(() => {
-          console.log("账号密码错误");
+          this.$message.error("账号密码错误");
         });
     },
   },

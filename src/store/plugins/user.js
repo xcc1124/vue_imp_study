@@ -13,7 +13,7 @@ export default (store) => {
   store.subscribe((mutation, state) => {
     if (mutation.type.startsWith("user/")) {
       if (mutation.type === "user/setUser") {
-        const user = JSON.stringify(state.user);
+        const user = JSON.stringify(state.user.user);
         localStorage.setItem("user", user);
       } else if (mutation.type === "user/clearUser") {
         localStorage.clearItem("user");
@@ -21,7 +21,7 @@ export default (store) => {
         mutation.type === "user/isLoginTrue" ||
         mutation.type === "user/isLoginFlase"
       ) {
-        const isLogin = JSON.stringify(state.isLogin);
+        const isLogin = JSON.stringify(state.user.isLogin);
         localStorage.setItem("isLogin", isLogin);
       }
     }

@@ -3,7 +3,13 @@
     <router-view />
   </div>
 </template>
-
+<script>
+export default {
+  created() {
+    console.log(this.$router);
+  },
+};
+</script>
 <style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

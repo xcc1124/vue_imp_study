@@ -40,20 +40,37 @@ export default {
     //   setUser: "user/setUser",
     // }),
     ...mapActions("user", ["setUser"]),
-    ...mapActions("router", ["getRouter"]),
+    ...mapActions("router", ["setRouter"]),
     login() {
       //设置了严格模式，不能给vuex中绑定地址
       this.setUser(JSON.parse(JSON.stringify(this.userForm)))
-        .then(() => {
+        .then(async () => {
           this.$message.success("登录成功，等待跳转...");
-          this.getRouter()
-            .then(() => {
-              this.$message.success("获取路由成功...");
-              this.$router.push("/");
-            })
-            .catch(() => {
-              this.$message.error("获取路由失败");
-            });
+
+          let routerList = await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve([
+                {
+                  path: "/",
+                  name: "Home",
+                  views: "Home.vue",
+                  children: [
+                    {
+                      path: "/home/r",
+                      name: "R",
+                      views: "inner/R.vue",
+                    },
+                  ],
+                },
+                {
+                  path: "/home",
+                  redirect: "/",
+                },
+              ]);
+            }, 500);
+          });
+          this.setRouter(routerList); //登录的时候异步请求一次路由数据--当然，这个数据也可以和登录接口写在一块
+          this.$router.push("/");
         })
         .catch(() => {
           this.$message.error("账号密码错误");

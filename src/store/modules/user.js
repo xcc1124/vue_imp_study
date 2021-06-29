@@ -34,7 +34,7 @@ const actions = {
         } else {
           reject();
         }
-      }, 1000);
+      }, 100);
     });
   },
 };

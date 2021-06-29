@@ -1,7 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store";
+import { routesWhiteList } from "@/config";
 
+//auth=true时是无需验证的
 Vue.use(VueRouter);
 
 const routes = [
@@ -9,9 +11,6 @@ const routes = [
     path: "/login",
     name: "Login",
     component: () => import("@/views/Login.vue"),
-    mate: {
-      auth: false,
-    },
   },
   {
     path: "/about",
@@ -21,9 +20,15 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
-    mate: {
-      auth: true,
-    },
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: () => import("../views/404.vue"),
+  },
+  {
+    path: "*",
+    redirect: "/404",
   },
 ];
 
@@ -31,21 +36,52 @@ const router = new VueRouter({
   routes,
 });
 
+const dgHandleRoute = (routeList) => {
+  //递归深度处理路由数据
+  if (Array.isArray(routeList)) {
+    let returnData = [];
+    routeList.forEach((item) => {
+      let childrenData = [];
+      if (item.children) {
+        childrenData = dgHandleRoute(item.children);
+      }
+      returnData.push({
+        path: item.path,
+        name: item.name,
+        component: () => import(`@/views/${item.views}`),
+        redirect: item.redirect ? item.redirect : null,
+        children: childrenData,
+      });
+    });
+    return returnData;
+  } else {
+    return [];
+  }
+};
+
 router.beforeEach((to, from, next) => {
   store.commit("ajax/clear"); // 取消请求
-  if (to.meta.auth) {
-    //判断是否要验证
-    if (to.path === "/login") {
-      next();
-    } else {
-      if (store.state.user.isLogin) {
+  if (routesWhiteList.indexOf(to.path) > -1) {
+    console.log(5555);
+    next();
+  } else {
+    if (store.state.user.isLogin) {
+      if (store.state.router.getRouter) {
         next();
       } else {
-        next("/login");
+        let rout = JSON.parse(JSON.stringify(store.state.router.router)); //深拷贝一份存在vuex中的路由数据
+        let routerData = dgHandleRoute(rout);
+        //路由数据要进行深度处理
+        router.addRoutes(routerData);
+        store.commit("router/setGetRouter");
+        next({
+          ...to,
+          replace: true,
+        });
       }
+    } else {
+      next("/login");
     }
-  } else {
-    next();
   }
 });
 const originalPush = VueRouter.prototype.push;

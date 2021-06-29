@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import store from "@/store";
 import { routesWhiteList } from "@/config";
 
-//auth=true时是无需验证的
 Vue.use(VueRouter);
 
 const routes = [
@@ -22,13 +21,8 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
   {
-    path: "/404",
-    name: "404",
-    component: () => import("../views/404.vue"),
-  },
-  {
     path: "*",
-    redirect: "/404",
+    component: () => import("../views/404.vue"),
   },
 ];
 
@@ -61,33 +55,37 @@ const dgHandleRoute = (routeList) => {
 
 router.beforeEach((to, from, next) => {
   store.commit("ajax/clear"); // 取消请求
-  if (routesWhiteList.indexOf(to.path) > -1) {
-    console.log(5555);
-    next();
+  if (store.state.user.isLogin) {
+    //首先判断当前有无登录
+    if (store.state.router.getRouter) {
+      //如果获取过了路由，则直接进入到页面中去
+      next();
+    } else {
+      //否则要从vuex中取路由数据进行动态渲染
+      let rout = JSON.parse(JSON.stringify(store.state.router.router)); //深拷贝一份存在vuex中的路由数据
+      let routerData = dgHandleRoute(rout); //路由数据要进行深度递归处理
+      router.addRoutes(routerData); //动态添加路由数据
+      store.commit("router/setGetRouter"); //设置vuex中的路由获取态
+      //动态添加完路由数据后要重新跳转路由
+      //此处的next和别处直接的next有出入，此处的会重新进入这个路由，而不是直接进入，相当于next()只会进行一次路由跳转,而next({...to,replace:true})会进行两次跳转
+      next({
+        ...to,
+        replace: true,
+      });
+    }
   } else {
-    if (store.state.user.isLogin) {
-      if (store.state.router.getRouter) {
-        next();
-      } else {
-        let rout = JSON.parse(JSON.stringify(store.state.router.router)); //深拷贝一份存在vuex中的路由数据
-        let routerData = dgHandleRoute(rout);
-        //路由数据要进行深度处理
-        router.addRoutes(routerData);
-        store.commit("router/setGetRouter");
-        next({
-          ...to,
-          replace: true,
-        });
-      }
+    if (routesWhiteList.indexOf(to.path) > -1) {
+      //白名单，不用登录态能进入的路由
+      next();
     } else {
       next("/login");
     }
   }
 });
-const originalPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location, onResolve, onReject) {
-  if (onResolve || onReject)
-    return originalPush.call(this, location, onResolve, onReject);
-  return originalPush.call(this, location).catch((err) => err);
-};
+// const originalPush = VueRouter.prototype.push;
+// VueRouter.prototype.push = function push(location, onResolve, onReject) {
+//   if (onResolve || onReject)
+//     return originalPush.call(this, location, onResolve, onReject);
+//   return originalPush.call(this, location).catch((err) => err);
+// };
 export default router;

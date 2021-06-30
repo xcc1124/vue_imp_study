@@ -53,7 +53,6 @@ export default {
               resolve(routes);
             }, 500);
           });
-          console.log(routerList);
           this.setRouter(routerList); //登录的时候异步请求一次路由数据--当然，这个数据也可以和登录接口写在一块
           this.$router.push("/");
         })

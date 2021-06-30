@@ -10,6 +10,7 @@
 
     <el-divider></el-divider>
     <el-button>同步/异步</el-button>
+    <el-button>$nextTick</el-button>
 
     <el-divider></el-divider>
     <el-button>插槽</el-button>
@@ -28,7 +29,7 @@
     <el-button>路由（动态/状态保存）</el-button>
 
     <el-divider></el-divider>
-    <el-button @click="$router.push('/chuanZhi')"
+    <el-button type="primary" plain @click="$router.push('/chuanZhi')"
       >父子（兄弟）组件通信</el-button
     >
 

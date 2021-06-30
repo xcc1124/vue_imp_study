@@ -1,11 +1,21 @@
 <template>
   <div id="app">
+    <el-button icon="el-icon-s-home" @click="$router.push('/')"></el-button>
+    <el-button icon="el-icon-switch-button" @click="loginOut"></el-button>
     <router-view />
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 export default {
   created() {},
+  methods: {
+    ...mapMutations("user", ["isLoginFlase"]),
+    loginOut() {
+      this.isLoginFlase();
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 <style lang="less">

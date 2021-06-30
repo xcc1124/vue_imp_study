@@ -28,7 +28,9 @@
     <el-button>路由（动态/状态保存）</el-button>
 
     <el-divider></el-divider>
-    <el-button>父子（兄弟）组件通信</el-button>
+    <el-button @click="$router.push('/chuanZhi')"
+      >父子（兄弟）组件通信</el-button
+    >
 
     <el-divider></el-divider>
     <el-button>工作中用过的方法</el-button>

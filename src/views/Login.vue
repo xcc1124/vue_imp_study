@@ -22,6 +22,7 @@
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
+import { routes } from "@/config";
 export default {
   data() {
     return {
@@ -49,26 +50,10 @@ export default {
 
           let routerList = await new Promise((resolve) => {
             setTimeout(() => {
-              resolve([
-                {
-                  path: "/",
-                  name: "Home",
-                  views: "Home.vue",
-                  children: [
-                    {
-                      path: "/home/r",
-                      name: "R",
-                      views: "inner/R.vue",
-                    },
-                  ],
-                },
-                {
-                  path: "/home",
-                  redirect: "/",
-                },
-              ]);
+              resolve(routes);
             }, 500);
           });
+          console.log(routerList);
           this.setRouter(routerList); //登录的时候异步请求一次路由数据--当然，这个数据也可以和登录接口写在一块
           this.$router.push("/");
         })

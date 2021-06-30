@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-input :value="value" placeholder="子1" @input="input"></el-input>
+    <!-- v-model和value效果一样 -->
+    <el-input v-model="value" placeholder="子1" @input="input"></el-input>
   </div>
 </template>
 

@@ -34,7 +34,9 @@
     >
 
     <el-divider></el-divider>
-    <el-button>工作中用过的方法</el-button>
+    <el-button type="primary" plain @click="$router.push('/gongzuo')"
+      >工作中用过的方法</el-button
+    >
   </div>
 </template>
 

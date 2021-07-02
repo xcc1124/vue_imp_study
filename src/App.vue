@@ -13,7 +13,7 @@ export default {
     ...mapMutations("user", ["isLoginFlase"]),
     loginOut() {
       this.isLoginFlase();
-      this.$router.push("/");
+      this.$router.push("/login");
     },
   },
 };

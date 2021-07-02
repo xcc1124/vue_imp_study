@@ -22,5 +22,10 @@ module.exports = {
       name: "ChuanZhi",
       views: "project/chuanZhi.vue",
     },
+    {
+      path: "/gongzuo",
+      name: "Gongzuo",
+      views: "project/gongzuo.vue",
+    },
   ],
 };

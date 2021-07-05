@@ -55,7 +55,7 @@ const dgHandleRoute = (routeList) => {
 
 router.beforeEach((to, from, next) => {
   store.commit("ajax/clear"); // 取消请求
-  if (store.state.user.isLogin) {
+  if (store.state.user.isLogin && store.state.router.router) {
     //首先判断当前有无登录
     if (store.state.router.getRouter) {
       //如果获取过了路由，则直接进入到页面中去

@@ -27,5 +27,15 @@ module.exports = {
       name: "Gongzuo",
       views: "project/gongzuo.vue",
     },
+    {
+      path: "/hanShuShi",
+      name: "HanShuShi",
+      views: "project/hanShuShi.vue",
+    },
+    {
+      path: "/hunRu",
+      name: "HunRu",
+      views: "project/hunRu.vue",
+    },
   ],
 };

@@ -15,6 +15,12 @@
     <el-divider></el-divider>
     <el-button>插槽</el-button>
     <el-button>组件化</el-button>
+    <el-button type="primary" plain @click="$router.push('/hanShuShi')"
+      >函数式组件</el-button
+    >
+    <el-button type="primary" plain @click="$router.push('/hunRu')"
+      >混入</el-button
+    >
     <el-button>class/style绑定</el-button>
     <el-button>必会API</el-button>
     <el-button>动画库</el-button>
